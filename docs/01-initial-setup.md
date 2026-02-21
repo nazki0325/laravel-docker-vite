@@ -134,6 +134,7 @@ yarn-error.log
 + volumes:
 +   vendor:
 +   node_modules:
++
 services:
     cli:
         build:
