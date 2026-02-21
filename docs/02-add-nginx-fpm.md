@@ -35,7 +35,7 @@ services:
 +           - ./docker/fpm/php.ini:/usr/local/etc/php/php.ini
 ```
 
-## docker/fpm/Dockerfile
+## `docker/fpm/Dockerfile`
 
 ```diff
 + FROM php:8.4-fpm
@@ -56,14 +56,14 @@ services:
 + ENTRYPOINT [ "bash", "-c", "exec php-fpm" ]
 ```
 
-## docker/nginx/Dockerfile
+## `docker/nginx/Dockerfile`
 
 ```diff
 FROM nginx:1.29
 COPY ./default.conf /etc/nginx/conf.d/default.conf
 ```
 
-## docker/nginx/default.conf
+## `docker/nginx/default.conf`
 
 ```diff
 + server {
