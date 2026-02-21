@@ -1,0 +1,6 @@
+services:
+    cli:
+        build:
+            context: ./docker/cli
+        volumes:
+            - .:/src
