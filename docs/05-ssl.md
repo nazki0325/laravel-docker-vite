@@ -80,30 +80,8 @@ PS C:\Users\nazki\laravel-docker-vite> mkcert env2.local.nazki0325.net "*.env2.l
 ### `docker-compose.yml`
 
 ```diff
-volumes:
-    vendor:
-    node_modules:
+(略)
 
-services:
-    cli:
-        build:
-            context: ./docker/cli
-        depends_on:
-            - mariadb
-        volumes:
-            - .:/src
-            - node_modules:/src/node_modules
-            - vendor:/src/vendor
-    nginx:
-        build:
-            context: ./docker/nginx
-        depends_on:
-            - fpm
-        ports:
-            - 50000:80
-        volumes:
-            - ./public:/src/public
-            - ./docker/nginx/logs:/logs
     fpm:
         build:
             context: ./docker/fpm
@@ -116,15 +94,8 @@ services:
             - node_modules:/src/node_modules
             - vendor:/src/vendor
 +           - ./docker/ssl:/ssl
-    mariadb:
-        image: mariadb:latest
-        volumes:
-            - ./docker/mariadb/data:/var/lib/mysql
-        environment:
-            MYSQL_DATABASE: ${DB_DATABASE}
-            MYSQL_USER: ${DB_USERNAME}
-            MYSQL_PASSWORD: ${DB_PASSWORD}
-            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+
+(略)
 ```
 
 ### `vite.config.ts`
@@ -190,7 +161,7 @@ APP_DEBUG=true
 + APP_HOST=env2.local.nazki0325.net
 + APP_URL=https://env2.local.nazki0325.net
 
-(以下略)
+(略)
 ```
 
 ## `npm run build` 時の対応
@@ -208,5 +179,5 @@ APP_DEBUG=true
 APP_HOST=env2.local.nazki0325.net
 APP_URL=https://env2.local.nazki0325.net
 
-(以下略)
+(略)
 ```

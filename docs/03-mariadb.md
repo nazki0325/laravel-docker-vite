@@ -71,27 +71,7 @@ ENTRYPOINT [ "bash", "-c", "tail -f /dev/null" ]
 ### `.env`
 
 ```diff
-APP_NAME=Laravel
-APP_ENV=local
-APP_KEY=
-APP_DEBUG=true
-APP_URL=http://localhost
-
-APP_LOCALE=en
-APP_FALLBACK_LOCALE=en
-APP_FAKER_LOCALE=en_US
-
-APP_MAINTENANCE_DRIVER=file
-# APP_MAINTENANCE_STORE=database
-
-# PHP_CLI_SERVER_WORKERS=4
-
-BCRYPT_ROUNDS=12
-
-LOG_CHANNEL=stack
-LOG_STACK=single
-LOG_DEPRECATIONS_CHANNEL=null
-LOG_LEVEL=debug
+(略)
 
 - DB_CONNECTION=sqlite
 + DB_CONNECTION=mysql
@@ -102,7 +82,7 @@ LOG_LEVEL=debug
 + DB_PASSWORD=pass
 + DB_ROOT_PASSWORD=any_root_password
 
-(以下略)
+(略)
 ```
 
 ## マイグレーション実行
