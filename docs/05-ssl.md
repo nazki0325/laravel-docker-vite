@@ -132,7 +132,6 @@ APP_DEBUG=true
 
 ```diff
 # vite 設定
-VITE_PORT=50173
 + ASSET_URL=https://env2.local.nazki0325.net
 
 APP_NAME=Laravel

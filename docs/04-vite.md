@@ -90,9 +90,6 @@ services:
 ## `.env`
 
 ```diff
-+ # ポート設定
-+ VITE_PORT=50173
-
 APP_NAME=Laravel
 APP_ENV=local
 APP_KEY=
