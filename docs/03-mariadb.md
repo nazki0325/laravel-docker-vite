@@ -1,6 +1,8 @@
 # mariadb のセットアップ
 
-## `docker-compose.yml`
+## コンテナの追加
+
+### `docker-compose.yml`
 
 ```diff
 volumes:
@@ -47,7 +49,7 @@ services:
 +           MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
 ```
 
-## `docker/cli/Dockerfile`
+### `docker/cli/Dockerfile`
 
 ```diff
 FROM php:8.4-cli
@@ -66,7 +68,7 @@ WORKDIR /src
 ENTRYPOINT [ "bash", "-c", "tail -f /dev/null" ]
 ```
 
-## `.env`
+### `.env`
 
 ```diff
 APP_NAME=Laravel

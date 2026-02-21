@@ -8,9 +8,12 @@
 PS C:\Users\nazki\laravel-docker-vite> mkcert env2.local.nazki0325.net "*.env2.local.nazki0325.net"
 ```
 
-生成された pem ファイルを `docker/ssl/` 以下に設置
+## pem ファイルの設置
 
-## `docker-compose.yml`
+生成された pem ファイルを `docker/ssl/` 以下に設置。
+ホストにリバースプロキシを設置している場合は、そちらも各自で追加。
+
+### `docker-compose.yml`
 
 ```diff
 volumes:
@@ -60,7 +63,7 @@ services:
             MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
 ```
 
-## `vite.config.ts`
+### `vite.config.ts`
 
 ```diff
 import { wayfinder } from '@laravel/vite-plugin-wayfinder';
@@ -112,7 +115,7 @@ export default({ mode }) => {
 }
 ```
 
-## `.env`
+### `.env`
 
 ```diff
 APP_NAME=Laravel
