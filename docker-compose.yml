@@ -27,6 +27,8 @@ services:
             context: ./docker/fpm
         depends_on:
             - mariadb
+        ports:
+            - 50173:50173
         volumes:
             - .:/src
             - node_modules:/src/node_modules
