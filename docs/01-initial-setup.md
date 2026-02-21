@@ -131,14 +131,17 @@ yarn-error.log
 ※※ 開発時にエディタが依存関係を解決できなくなるので、必要に応じてマウントし直す手順が必要になる可能性がある
 
 ```diff
++ volumes:
++   vendor:
++   node_modules:
 services:
     cli:
         build:
             context: ./docker/cli
         volumes:
             - .:/src
-+           - /src/node_modules
-+           - /src/vendor
++           - node_modules:/src/node_modules
++           - vendor:/src/vendor
 ```
 
 ```
