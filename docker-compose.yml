@@ -33,6 +33,7 @@ services:
             - .:/src
             - node_modules:/src/node_modules
             - vendor:/src/vendor
+            - ./docker/ssl:/ssl
     mariadb:
         image: mariadb:latest
         volumes:

@@ -4,6 +4,8 @@ import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
 import { defineConfig, loadEnv } from 'vite';
 
+import fs from 'fs';
+
 export default({ mode }) => {
     process.env = {...process.env, ...loadEnv(mode, process.cwd(), '')};
 
@@ -12,7 +14,11 @@ export default({ mode }) => {
             host: true,
             port: 50173,
             hmr: {
-                host: 'localhost',
+                host: 'env2.local.nazki0325.net',
+            },
+            https: {
+                key: fs.readFileSync(`/ssl/env2.local.nazki0325.net+1-key.pem`),
+                cert: fs.readFileSync(`/ssl/env2.local.nazki0325.net+1.pem`),
             },
             watch: {
                 usePolling: true,
