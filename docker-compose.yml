@@ -3,6 +3,18 @@ volumes:
     node_modules:
 
 services:
+    nginx:
+        build:
+            context: ./docker/nginx
+        depends_on:
+            - fpm
+        ports:
+            - ${APP_PORT}:80
+        volumes:
+            - ./public:/src/public
+            - ./docker/nginx/logs:/logs
+        environment:
+            TZ: ${APP_TIMEZONE}
     cli:
         build:
             context: ./docker/cli
@@ -14,18 +26,6 @@ services:
             - .:/src
             - node_modules:/src/node_modules
             - vendor:/src/vendor
-        environment:
-            TZ: ${APP_TIMEZONE}
-    nginx:
-        build:
-            context: ./docker/nginx
-        depends_on:
-            - fpm
-        ports:
-            - ${APP_PORT}:80
-        volumes:
-            - ./public:/src/public
-            - ./docker/nginx/logs:/logs
         environment:
             TZ: ${APP_TIMEZONE}
     fpm:
