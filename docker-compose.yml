@@ -1,8 +1,29 @@
+volumes:
+    vendor:
+    node_modules:
+
 services:
     cli:
         build:
             context: ./docker/cli
         volumes:
             - .:/src
-            - /src/node_modules
-            - /src/vendor
+            - node_modules:/src/node_modules
+            - vendor:/src/vendor
+    nginx:
+        build:
+            context: ./docker/nginx
+        depends_on:
+            - fpm
+        ports:
+            - 50000:80
+        volumes:
+            - ./public:/src/public
+            - ./docker/nginx/logs:/logs
+    fpm:
+        build:
+            context: ./docker/fpm
+        volumes:
+            - .:/src
+            - node_modules:/src/node_modules
+            - vendor:/src/vendor
