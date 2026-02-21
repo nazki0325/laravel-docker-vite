@@ -11,3 +11,4 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
 
 WORKDIR /src
+ENTRYPOINT [ "bash", "-c", "tail -f /dev/null" ]

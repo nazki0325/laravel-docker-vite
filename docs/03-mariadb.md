@@ -63,6 +63,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
 
 WORKDIR /src
+ENTRYPOINT [ "bash", "-c", "tail -f /dev/null" ]
 ```
 
 ## `.env`
@@ -105,7 +106,7 @@ LOG_LEVEL=debug
 ## マイグレーション実行
 
 ```
-PS C:\Users\nazki\laravel-docker-vite> docker compose run cli php artisan migrate
+PS C:\Users\nazki\laravel-docker-vite> docker compose exec cli php artisan migrate
 ```
 
 ここまでうまく作業が進めば、ブラウザアクセスは Vite 関連のエラーで止まるはず

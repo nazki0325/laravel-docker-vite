@@ -15,6 +15,8 @@
 
 ## `docker/cli/Dockerfile`
 
+今後出てくる共有ボリュームの都合で、常駐コンテナにする (`docker compose run` は使わない)
+
 ```diff
 + FROM php:8.4-cli
 +
@@ -24,6 +26,9 @@
 + # composer
 + COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 + ENV PATH="/root/.composer/vendor/bin:${PATH}"
++
++ WORKDIR /src
++ ENTRYPOINT [ "bash", "-c", "tail -f /dev/null" ]
 ```
 
 ## Docker Compose 立ち上げ
@@ -147,7 +152,7 @@ services:
 
 ```
 PS C:\Users\nazki\laravel-docker-vite> docker compose up -d --build
-PS C:\Users\nazki\laravel-docker-vite> docker compose run cli bash
+PS C:\Users\nazki\laravel-docker-vite> docker compose exec cli bash
 root@18c6f805417d:/src#
 root@18c6f805417d:/src# composer install
 ```
