@@ -161,3 +161,5 @@ import laravel from 'laravel-vite-plugin';
     });
 + }
 ```
+
+**※※ `.gitignore` で `resources` 配下のファイルを除外していると、tailwind の出力が狂う可能性がある**
