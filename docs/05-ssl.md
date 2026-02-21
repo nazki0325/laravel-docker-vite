@@ -125,3 +125,22 @@ APP_DEBUG=true
 
 (以下略)
 ```
+
+## `npm run build` 時の対応
+
+以下の設定をしないと、ブラウザで「HTTPS のページなのに HTTP が使われている」的なエラーが出る
+
+```diff
+# vite 設定
+VITE_PORT=50173
++ ASSET_URL=https://env2.local.nazki0325.net
+
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_HOST=env2.local.nazki0325.net
+APP_URL=https://env2.local.nazki0325.net
+
+(以下略)
+```
