@@ -95,7 +95,7 @@ services:
             MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
 ```
 
-## SSL 証明書
+## SSL 設定
 
 ### `.env`
 
