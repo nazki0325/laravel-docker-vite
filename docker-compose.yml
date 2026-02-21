@@ -4,3 +4,5 @@ services:
             context: ./docker/cli
         volumes:
             - .:/src
+            - /src/node_modules
+            - /src/vendor
