@@ -11,6 +11,8 @@ services:
     cli:
         build:
             context: ./docker/cli
++       depends_on:
++           - mariadb
         volumes:
             - .:/src
             - node_modules:/src/node_modules
@@ -28,6 +30,8 @@ services:
     fpm:
         build:
             context: ./docker/fpm
++       depends_on:
++           - mariadb
         volumes:
             - .:/src
             - node_modules:/src/node_modules
@@ -43,7 +47,7 @@ services:
 +           MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
 ```
 
-## docker/cli/Dockerfile
+## `docker/cli/Dockerfile`
 
 ```diff
 FROM php:8.4-cli
