@@ -1,6 +1,7 @@
-FROM php:8.4-fpm
+ARG PHP_VER=8.4
+FROM php:${PHP_VER}-fpm
 
-EXPOSE 50173
+EXPOSE ${VITE_PORT}
 
 RUN apt-get update \
     && apt-get install -y \

@@ -6,39 +6,51 @@ services:
     cli:
         build:
             context: ./docker/cli
+            args:
+                PHP_VER: ${PHP_VER}
         depends_on:
             - mariadb
         volumes:
             - .:/src
             - node_modules:/src/node_modules
             - vendor:/src/vendor
+        environment:
+            TZ: ${APP_TIMEZONE}
     nginx:
         build:
             context: ./docker/nginx
         depends_on:
             - fpm
         ports:
-            - 50000:80
+            - ${APP_PORT}:80
         volumes:
             - ./public:/src/public
             - ./docker/nginx/logs:/logs
+        environment:
+            TZ: ${APP_TIMEZONE}
     fpm:
         build:
             context: ./docker/fpm
+            args:
+                PHP_VER: ${PHP_VER}
+                VITE_PORT: ${VITE_PORT}
         depends_on:
             - mariadb
         ports:
-            - 50173:50173
+            - ${VITE_PORT}:${VITE_PORT}
         volumes:
             - .:/src
             - node_modules:/src/node_modules
             - vendor:/src/vendor
             - ./docker/ssl:/ssl
+        environment:
+            TZ: ${APP_TIMEZONE}
     mariadb:
         image: mariadb:latest
         volumes:
             - ./docker/mariadb/data:/var/lib/mysql
         environment:
+            TZ: ${APP_TIMEZONE}
             MYSQL_DATABASE: ${DB_DATABASE}
             MYSQL_USER: ${DB_USERNAME}
             MYSQL_PASSWORD: ${DB_PASSWORD}

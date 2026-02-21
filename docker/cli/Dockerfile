@@ -1,4 +1,5 @@
-FROM php:8.4-cli
+ARG PHP_VER=8.4
+FROM php:${PHP_VER}-cli
 
 RUN apt-get update
 RUN apt-get install -y git zip unzip
