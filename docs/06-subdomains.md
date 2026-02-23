@@ -109,7 +109,7 @@ export default({ mode }) => {
 ビルドファイルは `https://env-sample.nazki0325.net/build/assets/` に設置されるので、アクセスできるサブドメインを設定して CORS エラーを回避する
 ここでは nginx リバースプロキシを設定する
 
-```
+```diff
 # app
 server {
     listen 80;
@@ -131,26 +131,26 @@ server {
         proxy_set_header X-Forwarded-Port   443;
     }
 
-    # npm run build 環境下で CORS エラーが出るのを対策
-    location /build/assets/ {
-        proxy_pass http://192.168.0.202:50000;
-
-        set $cors_origin "";
-        if ($http_origin ~* "^https?://(v1|v2)\.env-sample\.nazki0325\.net$") {
-            set $cors_origin $http_origin;
-        }
-
-        add_header 'Access-Control-Allow-Origin' $cors_origin always;
-        add_header 'Access-Control-Allow-Credentials' 'true' always;
-        add_header 'Access-Control-Allow-Methods' 'GET,POST,OPTIONS' always;
-        add_header 'Access-Control-Allow-Headers' 'Authorization,Content-Type' always;
-        add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate' always;
-
-        if ($request_method = 'OPTIONS') {
-            add_header 'Content-Length' 0;
-            return 204;
-        }
-    }
++   # npm run build 環境下で CORS エラーが出るのを対策
++   location /build/assets/ {
++       proxy_pass http://192.168.0.202:50000;
++
++       set $cors_origin "";
++       if ($http_origin ~* "^https?://(v1|v2)\.env-sample\.nazki0325\.net$") {
++           set $cors_origin $http_origin;
++       }
++
++       add_header 'Access-Control-Allow-Origin' $cors_origin always;
++       add_header 'Access-Control-Allow-Credentials' 'true' always;
++       add_header 'Access-Control-Allow-Methods' 'GET,POST,OPTIONS' always;
++       add_header 'Access-Control-Allow-Headers' 'Authorization,Content-Type' always;
++       add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate' always;
++
++       if ($request_method = 'OPTIONS') {
++           add_header 'Content-Length' 0;
++           return 204;
++       }
++   }
 }
 
 # サブドメイン 1
