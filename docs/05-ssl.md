@@ -2,7 +2,7 @@
 
 ## 独自ドメイン設定
 
-ホストマシンにリバースプロキシを入れており、`env2.local.nazki0325.net` → `localhost:50000` となるよう設定をしている。
+ホストマシンにリバースプロキシを入れており、`env-sample.nazki0325.net` → `localhost:50000` となるよう設定をしている。
 
 ### `vite.config.ts`
 
@@ -22,7 +22,7 @@ export default({ mode }) => {
             port: 50173,
             hmr: {
 -               host: 'localhost',
-+               host: 'env2.local.nazki0325.net',
++               host: 'env-sample.nazki0325.net',
             },
             watch: {
                 usePolling: true,
@@ -59,7 +59,7 @@ APP_ENV=local
 APP_KEY=
 APP_DEBUG=true
 - APP_URL=http://localhost:50000
-+ APP_URL=http://env2.local.nazki0325.net
++ APP_URL=http://env-sample.nazki0325.net
 
 (以下略)
 ```
@@ -69,7 +69,7 @@ APP_DEBUG=true
 ここでは mkcert を使用
 
 ```
-PS C:\Users\nazki\laravel-docker-vite> mkcert env2.local.nazki0325.net "*.env2.local.nazki0325.net"
+PS C:\Users\nazki\laravel-docker-vite> mkcert env-sample.nazki0325.net "*.env-sample.nazki0325.net"
 ```
 
 ## pem ファイルの設置
@@ -117,11 +117,11 @@ export default({ mode }) => {
             host: true,
             port: 50173,
             hmr: {
-                host: 'env2.local.nazki0325.net',
+                host: 'env-sample.nazki0325.net',
             },
 +           https: {
-+               key: fs.readFileSync(`/ssl/env2.local.nazki0325.net+1-key.pem`),
-+               cert: fs.readFileSync(`/ssl/env2.local.nazki0325.net+1.pem`),
++               key: fs.readFileSync(`/ssl/env-sample.nazki0325.net+1-key.pem`),
++               cert: fs.readFileSync(`/ssl/env-sample.nazki0325.net+1.pem`),
 +           },
             watch: {
                 usePolling: true,
@@ -157,9 +157,9 @@ APP_NAME=Laravel
 APP_ENV=local
 APP_KEY=
 APP_DEBUG=true
-- APP_URL=http://env2.local.nazki0325.net
-+ APP_HOST=env2.local.nazki0325.net
-+ APP_URL=https://env2.local.nazki0325.net
+- APP_URL=http://env-sample.nazki0325.net
++ APP_HOST=env-sample.nazki0325.net
++ APP_URL=https://env-sample.nazki0325.net
 
 (略)
 ```
@@ -170,14 +170,14 @@ APP_DEBUG=true
 
 ```diff
 # vite 設定
-+ ASSET_URL=https://env2.local.nazki0325.net
++ ASSET_URL=https://env-sample.nazki0325.net
 
 APP_NAME=Laravel
 APP_ENV=local
 APP_KEY=
 APP_DEBUG=true
-APP_HOST=env2.local.nazki0325.net
-APP_URL=https://env2.local.nazki0325.net
+APP_HOST=env-sample.nazki0325.net
+APP_URL=https://env-sample.nazki0325.net
 
 (略)
 ```

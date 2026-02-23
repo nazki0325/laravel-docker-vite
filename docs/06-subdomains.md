@@ -2,10 +2,10 @@
 
 ## ルート設定
 
-* `sub1.env2.local.nazki0325.net`
-* `sub2.env2.local.nazki0325.net`
+* `v1.env-sample.nazki0325.net`
+* `v2.env-sample.nazki0325.net`
 
-の2つのサブドメインを作成し、`env2.local.nazki0325.net` 本体とは別の表示をする
+の2つのサブドメインを作成し、`env-sample.nazki0325.net` 本体とは別の表示をする
 
 ### app/routes/web.php
 
@@ -15,33 +15,33 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::domain('env2.local.nazki0325.net')->group(function () {
+Route::domain('env-sample.nazki0325.net')->group(function () {
     Route::get('/', function () {
         return Inertia::render('Welcome');
     })->name('home');
 });
 
-Route::domain('sub1.env2.local.nazki0325.net')->group(function () {
+Route::domain('v1.env-sample.nazki0325.net')->group(function () {
     Route::get('/', function () {
-        return Inertia::render('Welcome-sub1');
+        return Inertia::render('Welcome-v1');
     });
 });
 
-Route::domain('sub2.env2.local.nazki0325.net')->group(function () {
+Route::domain('v2.env-sample.nazki0325.net')->group(function () {
     Route::get('/', function () {
-        return Inertia::render('Welcome-sub2');
+        return Inertia::render('Welcome-v2');
     });
 });
 ```
 
-* `resources/js/pages/Welcome-sub1.vue`
-* `resources/js/pages/Welcome-sub2.vue`
+* `resources/js/pages/Welcome-v1.vue`
+* `resources/js/pages/Welcome-v2.vue`
 
 を作成し、表示内容を変えておく
 
 ## vite の設定 (npm run dev 時)
 
-vite は `https://env2.local.nazki0325.net:50173` で動いているので、アクセスできるサブドメインを設定して CORS エラーを回避する
+vite は `https://env-sample.nazki0325.net:50173` で動いているので、アクセスできるサブドメインを設定して CORS エラーを回避する
 
 ### `vite.config.ts`
 
@@ -63,19 +63,19 @@ export default({ mode }) => {
             port: 50173,
 +           cors: {
 +               origin: [
-+                   'https://env2.local.nazki0325.net',
-+                   'https://sub1.env2.local.nazki0325.net',
-+                   'https://sub2.env2.local.nazki0325.net'
++                   'https://env-sample.nazki0325.net',
++                   'https://v1.env-sample.nazki0325.net',
++                   'https://v2.env-sample.nazki0325.net'
 +               ],
 +               credentials: true,
 +           },
             hmr: {
 +               protocol: 'wss',
-                host: 'env2.local.nazki0325.net',
+                host: 'env-sample.nazki0325.net',
             },
             https: {
-                key: fs.readFileSync(`/ssl/env2.local.nazki0325.net+1-key.pem`),
-                cert: fs.readFileSync(`/ssl/env2.local.nazki0325.net+1.pem`),
+                key: fs.readFileSync(`/ssl/env-sample.nazki0325.net+1-key.pem`),
+                cert: fs.readFileSync(`/ssl/env-sample.nazki0325.net+1.pem`),
             },
             watch: {
                 usePolling: true,
@@ -106,27 +106,27 @@ export default({ mode }) => {
 
 ## ホストマシンの設定 (npm run build 時)
 
-ビルドファイルは `https://env2.local.nazki0325.net/build/assets/` に設置されるので、アクセスできるサブドメインを設定して CORS エラーを回避する
+ビルドファイルは `https://env-sample.nazki0325.net/build/assets/` に設置されるので、アクセスできるサブドメインを設定して CORS エラーを回避する
 ここでは nginx リバースプロキシを設定する
 
 ```
 # app
 server {
     listen 80;
-    server_name env2.local.nazki0325.net;
+    server_name env-sample.nazki0325.net;
     return 301 https://$host$request_uri;
 }
 server {
     listen 443 ssl http2;
-    server_name env2.local.nazki0325.net;
+    server_name env-sample.nazki0325.net;
 
     include C:/nginx-1.24.0/conf.d/common/proxy-common.conf;
-    include C:/nginx-1.24.0/conf.d/common/ssl.net.nazki0325.local.env2.conf;
+    include C:/nginx-1.24.0/conf.d/common/ssl.net.nazki0325.env-sample.conf;
 
     location / {
         proxy_pass http://192.168.0.202:50000;
 
-        proxy_set_header Host               env2.local.nazki0325.net;
+        proxy_set_header Host               env-sample.nazki0325.net;
         proxy_set_header X-Forwarded-Proto  https;
         proxy_set_header X-Forwarded-Port   443;
     }
@@ -136,7 +136,7 @@ server {
         proxy_pass http://192.168.0.202:50000;
 
         set $cors_origin "";
-        if ($http_origin ~* "^https?://(sub1|sub2)\.env2\.local\.nazki0325\.net$") {
+        if ($http_origin ~* "^https?://(v1|v2)\.env-sample\.nazki0325\.net$") {
             set $cors_origin $http_origin;
         }
 
@@ -156,20 +156,20 @@ server {
 # サブドメイン 1
 server {
     listen 80;
-    server_name sub1.env2.local.nazki0325.net;
+    server_name v1.env-sample.nazki0325.net;
     return 301 https://$host$request_uri;
 }
 server {
     listen 443 ssl http2;
-    server_name sub1.env2.local.nazki0325.net;
+    server_name v1.env-sample.nazki0325.net;
 
     include C:/nginx-1.24.0/conf.d/common/proxy-common.conf;
-    include C:/nginx-1.24.0/conf.d/common/ssl.net.nazki0325.local.env2.conf;
+    include C:/nginx-1.24.0/conf.d/common/ssl.net.nazki0325.env-sample.conf;
 
     location / {
         proxy_pass http://192.168.0.202:50000;
 
-        proxy_set_header Host               sub1.env2.local.nazki0325.net;
+        proxy_set_header Host               env-sample.local.nazki0325.net;
         proxy_set_header X-Forwarded-Proto  https;
         proxy_set_header X-Forwarded-Port   443;
     }
@@ -178,20 +178,20 @@ server {
 # サブドメイン 2
 server {
     listen 80;
-    server_name sub2.env2.local.nazki0325.net;
+    server_name v2.env-sample.nazki0325.net;
     return 301 https://$host$request_uri;
 }
 server {
     listen 443 ssl http2;
-    server_name sub2.env2.local.nazki0325.net;
+    server_name v2.env-sample.nazki0325.net;
 
     include C:/nginx-1.24.0/conf.d/common/proxy-common.conf;
-    include C:/nginx-1.24.0/conf.d/common/ssl.net.nazki0325.local.env2.conf;
+    include C:/nginx-1.24.0/conf.d/common/ssl.net.nazki0325.env-sample.conf;
 
     location / {
         proxy_pass http://192.168.0.202:50000;
 
-        proxy_set_header Host               sub2.env2.local.nazki0325.net;
+        proxy_set_header Host               v2.env-sample.nazki0325.net;
         proxy_set_header X-Forwarded-Proto  https;
         proxy_set_header X-Forwarded-Port   443;
     }

@@ -10,8 +10,8 @@
 APP_ENV=local
 APP_KEY=
 APP_DEBUG=true
-APP_HOST=env2.local.nazki0325.net
-APP_URL=https://env2.local.nazki0325.net
+APP_HOST=env-sample.nazki0325.net
+APP_URL=https://env-sample.nazki0325.net
 
 - APP_LOCALE=en
 + APP_LOCALE=ja
@@ -29,8 +29,8 @@ APP_NAME=laravel-docker-vite-sample
 APP_ENV=local
 APP_KEY=
 APP_DEBUG=true
-APP_HOST=env2.local.nazki0325.net
-APP_URL=https://env2.local.nazki0325.net
+APP_HOST=env-sample.nazki0325.net
+APP_URL=https://env-sample.nazki0325.net
 + APP_TIMEZONE=Asia/Tokyo
 
 APP_LOCALE=ja
@@ -105,10 +105,10 @@ services:
 vite 設定
 VITE_APP_NAME="${APP_NAME}"
 + VITE_PORT=50173
-- ASSET_URL=https://env2.local.nazki0325.net
+- ASSET_URL=https://env-sample.nazki0325.net
 + ASSET_URL="${APP_URL}"
-+ VITE_HTTPS_KEY=/ssl/env2.local.nazki0325.net+1-key.pem
-+ VITE_HTTPS_CERT=/ssl/env2.local.nazki0325.net+1.pem
++ VITE_HTTPS_KEY=/ssl/env-sample.nazki0325.net+1-key.pem
++ VITE_HTTPS_CERT=/ssl/env-sample.nazki0325.net+1.pem
 ```
 
 ### `docker-compose.yml
@@ -158,22 +158,22 @@ export default({ mode }) => {
 +           port: process.env.VITE_PORT,
             cors: {
                 origin: [
-                    'https://env2.local.nazki0325.net',
-                    'https://sub1.env2.local.nazki0325.net',
-                    'https://sub2.env2.local.nazki0325.net'
+                    'https://env-sample.nazki0325.net',
+                    'https://v1.env-sample.nazki0325.net',
+                    'https://v2.env-sample.nazki0325.net'
                 ],
                 credentials: true,
             },
             hmr: {
                 protocol: 'wss',
--               host: 'env2.local.nazki0325.net',
+-               host: 'env-sample.nazki0325.net',
 +               host: process.env.APP_HOST,
             },
             hmr: {
             },
             https: {
--               key: fs.readFileSync(`/ssl/env2.local.nazki0325.net+1-key.pem`),
--               cert: fs.readFileSync(`/ssl/env2.local.nazki0325.net+1.pem`),
+-               key: fs.readFileSync(`/ssl/env-sample.nazki0325.net+1-key.pem`),
+-               cert: fs.readFileSync(`/ssl/env-sample.nazki0325.net+1.pem`),
 +               key: fs.readFileSync(process.env.VITE_HTTPS_KEY),
 +               cert: fs.readFileSync(process.env.VITE_HTTPS_CERT),
             },
@@ -222,17 +222,17 @@ FROM php:8.4-fpm
 ```diff
 # vite 設定
 VITE_PORT=50173
-ASSET_URL=https://env2.local.nazki0325.net
-VITE_HTTPS_KEY=/ssl/env2.local.nazki0325.net+1-key.pem
-VITE_HTTPS_CERT=/ssl/env2.local.nazki0325.net+1.pem
+ASSET_URL=https://env-sample.nazki0325.net
+VITE_HTTPS_KEY=/ssl/env-sample.nazki0325.net+1-key.pem
+VITE_HTTPS_CERT=/ssl/env-sample.nazki0325.net+1.pem
 
 APP_NAME=laravel-docker-vite-sample
 APP_ENV=local
 APP_KEY=
 APP_DEBUG=true
 + APP_PORT=50000
-APP_HOST=env2.local.nazki0325.net
-APP_URL=https://env2.local.nazki0325.net
+APP_HOST=env-sample.nazki0325.net
+APP_URL=https://env-sample.nazki0325.net
 APP_TIMEZONE=Asia/Tokyo
 ```
 
