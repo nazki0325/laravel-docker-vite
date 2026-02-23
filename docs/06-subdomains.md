@@ -1,0 +1,200 @@
+# サブドメイン運用
+
+## ルート設定
+
+* `sub1.env2.local.nazki0325.net`
+* `sub2.env2.local.nazki0325.net`
+
+の2つのサブドメインを作成し、`env2.local.nazki0325.net` 本体とは別の表示をする
+
+### app/routes/web.php
+
+```
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+Route::domain('env2.local.nazki0325.net')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('Welcome');
+    })->name('home');
+});
+
+Route::domain('sub1.env2.local.nazki0325.net')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('Welcome-sub1');
+    });
+});
+
+Route::domain('sub2.env2.local.nazki0325.net')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('Welcome-sub2');
+    });
+});
+```
+
+* `resources/js/pages/Welcome-sub1.vue`
+* `resources/js/pages/Welcome-sub2.vue`
+
+を作成し、表示内容を変えておく
+
+## vite の設定 (npm run dev 時)
+
+vite は `https://env2.local.nazki0325.net:50173` で動いているので、アクセスできるサブドメインを設定して CORS エラーを回避する
+
+### `vite.config.ts`
+
+```diff
+import { wayfinder } from '@laravel/vite-plugin-wayfinder';
+import tailwindcss from '@tailwindcss/vite';
+import vue from '@vitejs/plugin-vue';
+import laravel from 'laravel-vite-plugin';
+import { defineConfig, loadEnv } from 'vite';
+
+import fs from 'fs';
+
+export default({ mode }) => {
+    process.env = {...process.env, ...loadEnv(mode, process.cwd(), '')};
+
+    return defineConfig({
+        server: {
+            host: true,
+            port: 50173,
++           cors: {
++               origin: [
++                   'https://env2.local.nazki0325.net',
++                   'https://sub1.env2.local.nazki0325.net',
++                   'https://sub2.env2.local.nazki0325.net'
++               ],
++               credentials: true,
++           },
+            hmr: {
++               protocol: 'wss',
+                host: 'env2.local.nazki0325.net',
+            },
+            https: {
+                key: fs.readFileSync(`/ssl/env2.local.nazki0325.net+1-key.pem`),
+                cert: fs.readFileSync(`/ssl/env2.local.nazki0325.net+1.pem`),
+            },
+            watch: {
+                usePolling: true,
+            }
+        },
+        plugins: [
+            laravel({
+                input: ['resources/js/app.ts'],
+                ssr: 'resources/js/ssr.ts',
+                refresh: true,
+            }),
+            tailwindcss(),
+            vue({
+                template: {
+                    transformAssetUrls: {
+                        base: null,
+                        includeAbsolute: false,
+                    },
+                },
+            }),
+            wayfinder({
+                formVariants: true,
+            }),
+        ],
+    });
+}
+```
+
+## ホストマシンの設定 (npm run build 時)
+
+ビルドファイルは `https://env2.local.nazki0325.net/build/assets/` に設置されるので、アクセスできるサブドメインを設定して CORS エラーを回避する
+ここでは nginx リバースプロキシを設定する
+
+```
+# app
+server {
+    listen 80;
+    server_name env2.local.nazki0325.net;
+    return 301 https://$host$request_uri;
+}
+server {
+    listen 443 ssl http2;
+    server_name env2.local.nazki0325.net;
+
+    include C:/nginx-1.24.0/conf.d/common/proxy-common.conf;
+    include C:/nginx-1.24.0/conf.d/common/ssl.net.nazki0325.local.env2.conf;
+
+    location / {
+        proxy_pass http://192.168.0.202:50000;
+
+        proxy_set_header Host               env2.local.nazki0325.net;
+        proxy_set_header X-Forwarded-Proto  https;
+        proxy_set_header X-Forwarded-Port   443;
+    }
+
+    # npm run build 環境下で CORS エラーが出るのを対策
+    location /build/assets/ {
+        proxy_pass http://192.168.0.202:50000;
+
+        set $cors_origin "";
+        if ($http_origin ~* "^https?://(sub1|sub2)\.env2\.local\.nazki0325\.net$") {
+            set $cors_origin $http_origin;
+        }
+
+        add_header 'Access-Control-Allow-Origin' $cors_origin always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        add_header 'Access-Control-Allow-Methods' 'GET,POST,OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Authorization,Content-Type' always;
+        add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate' always;
+
+        if ($request_method = 'OPTIONS') {
+            add_header 'Content-Length' 0;
+            return 204;
+        }
+    }
+}
+
+# サブドメイン 1
+server {
+    listen 80;
+    server_name sub1.env2.local.nazki0325.net;
+    return 301 https://$host$request_uri;
+}
+server {
+    listen 443 ssl http2;
+    server_name sub1.env2.local.nazki0325.net;
+
+    include C:/nginx-1.24.0/conf.d/common/proxy-common.conf;
+    include C:/nginx-1.24.0/conf.d/common/ssl.net.nazki0325.local.env2.conf;
+
+    location / {
+        proxy_pass http://192.168.0.202:50000;
+
+        proxy_set_header Host               sub1.env2.local.nazki0325.net;
+        proxy_set_header X-Forwarded-Proto  https;
+        proxy_set_header X-Forwarded-Port   443;
+    }
+}
+
+# サブドメイン 2
+server {
+    listen 80;
+    server_name sub2.env2.local.nazki0325.net;
+    return 301 https://$host$request_uri;
+}
+server {
+    listen 443 ssl http2;
+    server_name sub2.env2.local.nazki0325.net;
+
+    include C:/nginx-1.24.0/conf.d/common/proxy-common.conf;
+    include C:/nginx-1.24.0/conf.d/common/ssl.net.nazki0325.local.env2.conf;
+
+    location / {
+        proxy_pass http://192.168.0.202:50000;
+
+        proxy_set_header Host               sub2.env2.local.nazki0325.net;
+        proxy_set_header X-Forwarded-Proto  https;
+        proxy_set_header X-Forwarded-Port   443;
+    }
+}
+```
+
