@@ -15,9 +15,9 @@ export default(mode: string) => {
             port: Number(process.env.VITE_PORT),
             cors: {
                 origin: [
-                    'https://env2.local.nazki0325.net',
-                    'https://sub1.env2.local.nazki0325.net',
-                    'https://sub2.env2.local.nazki0325.net'
+                    'https://env-sample.nazki0325.net',
+                    'https://v1.env-sample.nazki0325.net',
+                    'https://v2.env-sample.nazki0325.net'
                 ],
                 credentials: true,
             },

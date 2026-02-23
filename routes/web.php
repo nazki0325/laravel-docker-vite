@@ -3,20 +3,20 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::domain('env2.local.nazki0325.net')->group(function () {
+Route::domain('env-sample.nazki0325.net')->group(function () {
     Route::get('/', function () {
         return Inertia::render('Welcome');
     })->name('home');
 });
 
-Route::domain('sub1.env2.local.nazki0325.net')->group(function () {
+Route::domain('v1.env-sample.nazki0325.net')->group(function () {
     Route::get('/', function () {
-        return Inertia::render('Welcome-sub1');
+        return Inertia::render('Welcome-v1');
     });
 });
 
-Route::domain('sub2.env2.local.nazki0325.net')->group(function () {
+Route::domain('v2.env-sample.nazki0325.net')->group(function () {
     Route::get('/', function () {
-        return Inertia::render('Welcome-sub2');
+        return Inertia::render('Welcome-v2');
     });
 });
