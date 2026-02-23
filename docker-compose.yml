@@ -8,6 +8,7 @@ services:
             context: ./docker/nginx
         depends_on:
             - fpm
+            - mariadb
         ports:
             - ${APP_PORT}:80
         volumes:
