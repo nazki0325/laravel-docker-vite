@@ -156,9 +156,20 @@ export default({ mode }) => {
             host: true,
 -           port: 50173,
 +           port: process.env.VITE_PORT,
+            cors: {
+                origin: [
+                    'https://env2.local.nazki0325.net',
+                    'https://sub1.env2.local.nazki0325.net',
+                    'https://sub2.env2.local.nazki0325.net'
+                ],
+                credentials: true,
+            },
             hmr: {
+                protocol: 'wss',
 -               host: 'env2.local.nazki0325.net',
 +               host: process.env.APP_HOST,
+            },
+            hmr: {
             },
             https: {
 -               key: fs.readFileSync(`/ssl/env2.local.nazki0325.net+1-key.pem`),
