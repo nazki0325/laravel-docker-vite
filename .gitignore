@@ -38,7 +38,8 @@ yarn-error.log
 /database
 /public
 # /resources
-/routes
+# /routes
+/routes/console.php
 /storage
 /tests
 /phpunit.xml

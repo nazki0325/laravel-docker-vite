@@ -13,7 +13,16 @@ export default(mode: string) => {
         server: {
             host: true,
             port: Number(process.env.VITE_PORT),
+            cors: {
+                origin: [
+                    'https://env2.local.nazki0325.net',
+                    'https://sub1.env2.local.nazki0325.net',
+                    'https://sub2.env2.local.nazki0325.net'
+                ],
+                credentials: true,
+            },
             hmr: {
+                protocol: 'wss',
                 host: process.env.APP_HOST,
             },
             https: {
