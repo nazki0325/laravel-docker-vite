@@ -34,10 +34,10 @@ Route::domain('v2.env-sample.nazki0325.net')->group(function () {
 });
 ```
 
+今回は `Laravel Inertia` を使用しているので、以下のファイルを作成し、表示内容を変えておく。
+
 * `resources/js/pages/Welcome-v1.vue`
 * `resources/js/pages/Welcome-v2.vue`
-
-を作成し、表示内容を変えておく
 
 ## vite の設定 (npm run dev 時)
 
@@ -106,8 +106,8 @@ export default({ mode }) => {
 
 ## ホストマシンの設定 (npm run build 時)
 
-ビルドファイルは `https://env-sample.nazki0325.net/build/assets/` に設置されるので、アクセスできるサブドメインを設定して CORS エラーを回避する
-ここでは nginx リバースプロキシを設定する
+ビルドファイルは `https://env-sample.nazki0325.net/build/assets/` に設置されるので、アクセスできるサブドメインを設定して CORS エラーを回避する。
+ここでは nginx リバースプロキシを設定する。
 
 ```diff
 # app

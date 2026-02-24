@@ -100,7 +100,7 @@ services:
 +}
 ```
 
-## 権限の変更
+## (Laravel の場合) 権限の変更
 
 ```
 PS C:\Users\nazki\laravel-docker-vite> docker compose up -d --build

@@ -4,6 +4,8 @@
 
 ホストマシンにリバースプロキシを入れており、`env-sample.nazki0325.net` → `localhost:50000` となるよう設定をしている。
 
+今回はホストの設定は省略。
+
 ### `vite.config.ts`
 
 ```diff
@@ -66,7 +68,8 @@ APP_DEBUG=true
 
 ## 証明書を作成
 
-ここでは mkcert を使用
+ここでは `mkcert` を使用。
+サブドメインも運用できるようワイルドカードを指定する。
 
 ```
 PS C:\Users\nazki\laravel-docker-vite> mkcert env-sample.nazki0325.net "*.env-sample.nazki0325.net"
@@ -166,7 +169,7 @@ APP_DEBUG=true
 
 ## `npm run build` 時の対応
 
-以下の設定をしないと、ブラウザで「HTTPS のページなのに HTTP が使われている」的なエラーが出る
+以下の設定をしないと、ブラウザで **「HTTPS のページなのに HTTP が使われている」** 的なエラーが出る
 
 ```diff
 # vite 設定

@@ -89,6 +89,8 @@ Laravel インストーラが生成した `.gitignore` を整備しておく。
 
 **`resources` に関しては tailwind 関連で関わってくるので除外しない**
 
+### `.gitignore`
+
 ```diff
 /.phpunit.cache
 /bootstrap/ssr
@@ -130,6 +132,9 @@ yarn-error.log
 + /storage
 + /tests
 + /phpunit.xml
++ eslint.config.js
++ pint.json
++ tsconfig.json
 ```
 
 ## composer install
@@ -137,6 +142,8 @@ yarn-error.log
 大量にファイルが生成される `vendor`, `node_modules` をホストからマウントしないよう `docker-compose.yml` を修正
 
 **開発時にエディタが依存関係を解決できなくなるので、必要に応じてマウントし直す手順が必要になる可能性がある**
+
+### `docker-compose.yml`
 
 ```diff
 + volumes:

@@ -3,7 +3,7 @@
 ## `fpm` コンテナに npm をセットアップ
 
 Vite はポート `50173` で動作させる想定。
-**Laravel 12 は `node 20.19` 以上が必要**
+**Laravel 12 は node 20.19 以上が必要。**
 
 ### `docker/fpm/Dockerfile`
 
@@ -77,7 +77,7 @@ PS C:\Users\nazki\laravel-docker-vite> docker compose exec fpm npm install
 PS C:\Users\nazki\laravel-docker-vite> docker compose exec fpm npm run dev
 ```
 
-`npm install` でコケる場合、`node_modules` のボリュームを誰かが掴んでる可能性がある。
+`npm install` でコケる場合、`node_modules` のボリュームを誰かが掴んだままになっている可能性がある。
 `docker compose run` を使ってる場合に陥りやすい。
 
 ## Vite のポート番号変更
@@ -130,4 +130,5 @@ import laravel from 'laravel-vite-plugin';
 + }
 ```
 
-**`.gitignore` で `resources` 配下のファイルを除外していると、tailwind の出力が狂う可能性がある**
+**`.gitignore` で `resources` 配下のファイルを除外していると、tailwind の出力が狂う可能性がある。**
+tailwind は ignore されていないファイルだけをコンパイルする特性があるらしい。
