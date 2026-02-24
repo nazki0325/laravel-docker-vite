@@ -26,13 +26,25 @@ services:
             - mariadb
         volumes:
             - .:/src
-            - node_modules:/src/node_modules
             - vendor:/src/vendor
         environment:
             TZ: ${APP_TIMEZONE}
     fpm:
         build:
             context: ./docker/fpm
+            args:
+                PHP_VER: ${PHP_VER}
+        depends_on:
+            - npm
+            - mariadb
+        volumes:
+            - .:/src
+            - vendor:/src/vendor
+        environment:
+            TZ: ${APP_TIMEZONE}
+    npm:
+        build:
+            context: ./docker/npm
             args:
                 PHP_VER: ${PHP_VER}
                 VITE_PORT: ${VITE_PORT}
@@ -42,8 +54,8 @@ services:
             - ${VITE_PORT}:${VITE_PORT}
         volumes:
             - .:/src
-            - node_modules:/src/node_modules
             - vendor:/src/vendor
+            - node_modules:/src/node_modules
             - ./docker/ssl:/ssl
         environment:
             TZ: ${APP_TIMEZONE}
