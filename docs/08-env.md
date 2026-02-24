@@ -220,7 +220,7 @@ export default({ mode }) => {
 }
 ```
 
-### docker/fpm/Dockerfile
+### `docker/fpm/Dockerfile`
 
 ```diff
 FROM php:8.4-fpm
@@ -255,7 +255,7 @@ APP_TIMEZONE=Asia/Tokyo
 + PHPMYADMIN_PORT=50001
 ```
 
-### `docker-compose.yml
+### `docker-compose.yml`
 
 ```diff
 (略)
