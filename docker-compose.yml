@@ -17,34 +17,9 @@ services:
             - ./docker/nginx/logs:/logs
         environment:
             TZ: ${APP_TIMEZONE}
-    cli:
+    app:
         build:
-            context: ./docker/cli
-            args:
-                PHP_VER: ${PHP_VER}
-        depends_on:
-            - mariadb
-        volumes:
-            - .:/src
-            - vendor:/src/vendor
-        environment:
-            TZ: ${APP_TIMEZONE}
-    fpm:
-        build:
-            context: ./docker/fpm
-            args:
-                PHP_VER: ${PHP_VER}
-        depends_on:
-            - npm
-            - mariadb
-        volumes:
-            - .:/src
-            - vendor:/src/vendor
-        environment:
-            TZ: ${APP_TIMEZONE}
-    npm:
-        build:
-            context: ./docker/npm
+            context: ./docker/app
             args:
                 PHP_VER: ${PHP_VER}
                 VITE_PORT: ${VITE_PORT}
@@ -57,6 +32,19 @@ services:
             - vendor:/src/vendor
             - node_modules:/src/node_modules
             - ./docker/ssl:/ssl
+        environment:
+            TZ: ${APP_TIMEZONE}
+    fpm:
+        build:
+            context: ./docker/fpm
+            args:
+                PHP_VER: ${PHP_VER}
+        depends_on:
+            - app
+            - mariadb
+        volumes:
+            - .:/src
+            - vendor:/src/vendor
         environment:
             TZ: ${APP_TIMEZONE}
     mariadb:
