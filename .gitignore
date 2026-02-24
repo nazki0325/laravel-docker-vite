@@ -43,3 +43,5 @@ yarn-error.log
 /storage
 /tests
 /phpunit.xml
+eslint.config.js
+pint.json
