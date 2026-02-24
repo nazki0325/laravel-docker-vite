@@ -7,6 +7,8 @@
 * Laravel 12
 * Inertia
 * Vue.js
+* MariaDB
+* phpMyAdmin
 
 ## 全体像
 
