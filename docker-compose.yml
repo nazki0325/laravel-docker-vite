@@ -13,7 +13,7 @@ services:
             - ${APP_PORT}:80
         volumes:
             - ./public:/src/public
-            - ./docs:/src/docs
+            - ./static:/src/static
             - ./docker/nginx/logs:/logs
         environment:
             TZ: ${APP_TIMEZONE}
