@@ -201,6 +201,7 @@ server {
 ## 静的ファイルだけのサブドメイン
 
 `docs.env-sample.nazki0325.net` で `docs` 以下のファイルを見れるようにする。
+ホストマシンの設定は `env-sample.nazki0325.net` と同じポートへの転送だけ。
 
 ### docs/index.html
 
