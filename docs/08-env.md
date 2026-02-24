@@ -95,16 +95,30 @@ services:
             MYSQL_USER: ${DB_USERNAME}
             MYSQL_PASSWORD: ${DB_PASSWORD}
             MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        depends_on:
+            - mariadb
+        restart: always
+        environment:
++           TZ: ${APP_TIMEZONE}
+            PMA_HOST: mariadb
+            PMA_USER: root
+            PMA_PASSWORD: ${DB_ROOT_PASSWORD}
+        ports:
+            - 50001:80
+        volumes:
+            - ./docker/phpmyadmin/sessions:/sessions
 ```
 
-## SSL 設定
+## Vite 設定
 
 ### `.env`
 
 ```diff
 (略)
 
-vite 設定
+# vite 設定
 VITE_APP_NAME="${APP_NAME}"
 + VITE_PORT=50173
 - ASSET_URL=https://env-sample.nazki0325.net
@@ -236,6 +250,9 @@ APP_DEBUG=true
 APP_HOST=env-sample.nazki0325.net
 APP_URL=https://env-sample.nazki0325.net
 APP_TIMEZONE=Asia/Tokyo
+
++ # phpmyadmin 設定
++ PHPMYADMIN_PORT=50001
 ```
 
 ### `docker-compose.yml
@@ -258,6 +275,22 @@ APP_TIMEZONE=Asia/Tokyo
             TZ: ${APP_TIMEZONE}
 
 (略)
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        depends_on:
+            - mariadb
+        restart: always
+        environment:
+            TZ: ${APP_TIMEZONE}
+            PMA_HOST: mariadb
+            PMA_USER: root
+            PMA_PASSWORD: ${DB_ROOT_PASSWORD}
+        ports:
+-           - 50001:80
++           - "${PHPMYADMIN_PORT}:80"
+        volumes:
+            - ./docker/phpmyadmin/sessions:/sessions
 ```
 
 ## PHP のバージョン統一
