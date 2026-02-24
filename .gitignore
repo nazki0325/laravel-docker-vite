@@ -45,3 +45,4 @@ yarn-error.log
 /phpunit.xml
 eslint.config.js
 pint.json
+tsconfig.json
