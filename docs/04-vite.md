@@ -1,29 +1,28 @@
 # Vite 設定
 
-## `fpm` コンテナに npm をセットアップ
+## `app` コンテナに npm をセットアップ
 
 Vite はポート `50173` で動作させる想定。
 **Laravel 12 は node 20.19 以上が必要。**
 
-### `docker/fpm/Dockerfile`
+最初は npm を独立コンテナにしようと思っていたが、あまりに依存関係が複雑だったため断念。
+結局 Sail っぽくなった。
+
+### `docker/app/Dockerfile`
 
 ```diff
-FROM php:8.4-fpm
+FROM php:8.4-cli
 
 + EXPOSE 50173
 
-RUN apt-get update \
-    && apt-get install -y \
-    git \
-    zip \
-    unzip \
-    libmcrypt-dev \
-    libzip-dev
+RUN apt-get update
+RUN apt-get install -y git zip unzip
 
-RUN docker-php-ext-install zip
-RUN docker-php-ext-install bcmath
-RUN docker-php-ext-install pdo_mysql mysqli exif
+# composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+ENV PATH="/root/.composer/vendor/bin:${PATH}"
 
++ # node
 + ENV NODE_VERSION=20.19.0
 + RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 + ENV NVM_DIR=/root/.nvm
@@ -35,7 +34,7 @@ RUN docker-php-ext-install pdo_mysql mysqli exif
 + RUN npm --version
 
 WORKDIR /src
-ENTRYPOINT [ "bash", "-c", "exec php-fpm" ]
+ENTRYPOINT [ "bash", "-c", "tail -f /dev/null" ]
 ```
 
 ### `docker-compose.yml`
@@ -43,9 +42,9 @@ ENTRYPOINT [ "bash", "-c", "exec php-fpm" ]
 ```diff
 (略)
 
-    fpm:
+    app:
         build:
-            context: ./docker/fpm
+            context: ./docker/app
         depends_on:
             - mariadb
 +       ports:
@@ -54,7 +53,7 @@ ENTRYPOINT [ "bash", "-c", "exec php-fpm" ]
             - .:/src
             - node_modules:/src/node_modules
             - vendor:/src/vendor
-            
+
 (略)
 ```
 
@@ -73,8 +72,8 @@ APP_DEBUG=true
 ## npm 起動
 
 ```
-PS C:\Users\nazki\laravel-docker-vite> docker compose exec fpm npm install
-PS C:\Users\nazki\laravel-docker-vite> docker compose exec fpm npm run dev
+PS C:\Users\nazki\laravel-docker-vite> docker compose exec app npm install
+PS C:\Users\nazki\laravel-docker-vite> docker compose exec app npm run dev
 ```
 
 `npm install` でコケる場合、`node_modules` のボリュームを誰かが掴んだままになっている可能性がある。

@@ -30,16 +30,47 @@ PHP + Vite が動作するサブドメイン。
 ## Docker コンテナの構造
 
 ```mermaid
-flowchart TD
-    ホストのリバースプロキシ --> phpmyadmin:50001
-    ホストのリバースプロキシ --> nginx:50000 --> fpm:9000 --> npm --> vite:50173
-    docker-compose --> cli --> mariadb:3306
-    cli --> composer
-    phpmyadmin:50001 --> mariadb:3306
-    fpm:9000 --> mariadb:3306
+flowchart BT
+    subgraph ホスト
+        rev-proxy[リバースプロキシ]
+    end
 
-    composer --> ファイルシステム
-    npm --> ファイルシステム
+    subgraph Docker
+        nginx[nginx:50000]
+        fpm[fpm:9000]
+        db[mariadb:3306]
+        myadmin[phpmyadmin:50001]
+
+        subgraph app container
+            direction TB
+            app
+            npm
+            composer
+            vite[vite:50173]
+        end
+    end
+
+    docker-compose --> app
+    
+    rev-proxy ==>|https| myadmin
+    rev-proxy ==>|https| nginx
+    nginx ==>|http| fpm
+
+    fpm -->|php-fpm| app
+    myadmin -->|DB接続| db
+    app -->|DB接続| db
+
+    app -.->|exec| composer
+    app -.->|exec| npm
+    npm -.->|dev/build| vite
+
+
+    linkStyle 1,2 stroke-width:4px,stroke:green
+    linkStyle 3 stroke-width:4px,stroke:red
+    
+    linkStyle 0,4,5,6 stroke-width:2px,stroke:cyan
+
+    linkStyle 7,8,9 stroke:gray
 ```
 
 ## 構築手順

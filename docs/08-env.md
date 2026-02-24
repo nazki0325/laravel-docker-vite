@@ -48,9 +48,9 @@ volumes:
     node_modules:
 
 services:
-    cli:
+    app:
         build:
-            context: ./docker/cli
+            context: ./docker/app
         depends_on:
             - mariadb
         volumes:
@@ -76,13 +76,10 @@ services:
             context: ./docker/fpm
         depends_on:
             - mariadb
-        ports:
-            - 50173:50173
         volumes:
             - .:/src
             - node_modules:/src/node_modules
             - vendor:/src/vendor
-            - ./docker/ssl:/ssl
 +       environment:
 +           TZ: ${APP_TIMEZONE}
     mariadb:
@@ -132,9 +129,9 @@ VITE_APP_NAME="${APP_NAME}"
 ```diff
 (略)
 
-    fpm:
+    app:
         build:
-            context: ./docker/fpm
+            context: ./docker/app
         depends_on:
             - mariadb
 +           args:
@@ -220,10 +217,10 @@ export default({ mode }) => {
 }
 ```
 
-### `docker/fpm/Dockerfile`
+### `docker/app/Dockerfile`
 
 ```diff
-FROM php:8.4-fpm
+FROM php:8.4-cli
 
 - EXPOSE 50173
 + EXPOSE ${VITE_PORT}
@@ -298,7 +295,7 @@ APP_TIMEZONE=Asia/Tokyo
 ### `.env`
 
 ```diff
-+ # cli, fpm 両コンテナの PHP バージョン
++ # app, fpm 両コンテナの PHP バージョン
 + PHP_VER=8.4
 ```
 
@@ -307,9 +304,9 @@ APP_TIMEZONE=Asia/Tokyo
 ```diff
 (略)
 
-    cli:
+    app:
         build:
-            context: ./docker/cli
+            context: ./docker/app
 +           args:
 +               PHP_VER: ${PHP_VER}
         depends_on:
@@ -344,7 +341,7 @@ APP_TIMEZONE=Asia/Tokyo
 (略)
 ```
 
-### `docker/cli/Dockerfile`
+### `docker/app/Dockerfile`
 
 ```diff
 - FROM php:8.4-cli

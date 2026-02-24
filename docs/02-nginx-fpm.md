@@ -10,9 +10,9 @@ volumes:
     node_modules:
 
 services:
-    cli:
+    app:
         build:
-            context: ./docker/cli
+            context: ./docker/app
         volumes:
             - .:/src
             - node_modules:/src/node_modules

@@ -13,9 +13,9 @@ volumes:
     node_modules:
 
 services:
-    cli:
+    app:
         build:
-            context: ./docker/cli
+            context: ./docker/app
 +       depends_on:
 +           - mariadb
         volumes:
@@ -52,7 +52,7 @@ services:
 +           MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
 ```
 
-### `docker/cli/Dockerfile`
+### `docker/app/Dockerfile`
 
 ```diff
 FROM php:8.4-cli
@@ -91,7 +91,7 @@ ENTRYPOINT [ "bash", "-c", "tail -f /dev/null" ]
 ## マイグレーション実行
 
 ```
-PS C:\Users\nazki\laravel-docker-vite> docker compose exec cli php artisan migrate
+PS C:\Users\nazki\laravel-docker-vite> docker compose exec app php artisan migrate
 ```
 
 ここまでうまく作業が進めば、ブラウザアクセスは Vite 関連のエラーで止まるはず

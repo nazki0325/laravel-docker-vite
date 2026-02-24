@@ -8,14 +8,14 @@
 
 ```diff
 + services:
-+   cli:
++   app:
 +       build:
-+           context: ./docker/cli
++           context: ./docker/app
 +       volumes:
 +           - .:/src
 ```
 
-### `docker/cli/Dockerfile`
+### `docker/app/Dockerfile`
 
 今後出てくる共有ボリュームの都合で、常駐コンテナにする (`docker compose run` は使わない)
 
@@ -37,7 +37,7 @@
 
 ```
 PS C:\Users\nazki\laravel-docker-vite> docker compose up -d --build
-PS C:\Users\nazki\laravel-docker-vite> docker compose run cli bash 
+PS C:\Users\nazki\laravel-docker-vite> docker compose run app bash 
 root@7f55adb2f897:/src#
 root@7f55adb2f897:/src# composer init
 
@@ -63,7 +63,7 @@ root@7f55adb2f897:/src# ./vendor/bin/laravel new my-app
 ```
 
 Laravel インストールコマンドが走り出すので、プロジェクトに合わせた選択肢を選ぶ。
-ここでは Vue, No authentication, PHPUnit, AI なしを選択、`npm install` もしなくていい。
+今回は Vue, No authentication, PHPUnit, AI なしを選択。
 
 ちなみに、Laravel 12 ではデフォルトのデータベースに sqlite が採用されている。後述のセクションで mariadb を設置する。
 
@@ -151,9 +151,9 @@ yarn-error.log
 +   node_modules:
 +
 services:
-    cli:
+    app:
         build:
-            context: ./docker/cli
+            context: ./docker/app
         volumes:
             - .:/src
 +           - node_modules:/src/node_modules
@@ -162,10 +162,8 @@ services:
 
 ```
 PS C:\Users\nazki\laravel-docker-vite> docker compose up -d --build
-PS C:\Users\nazki\laravel-docker-vite> docker compose exec cli bash
-root@18c6f805417d:/src#
-root@18c6f805417d:/src# composer install
+PS C:\Users\nazki\laravel-docker-vite> docker compose exec app composer install
+PS C:\Users\nazki\laravel-docker-vite> docker compose exec app npm install
 ```
 
-`cli` コンテナに `node` はインストールしていないので、`npm install` はしない。
-後述の `fpm` コンテナで行なう。
+Vite を本格的に整備するまでは `npm install` は省いても大丈夫。
