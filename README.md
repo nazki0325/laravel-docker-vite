@@ -18,7 +18,8 @@
 中核となるドメイン。
 
 ### `v1.env-sample.nazki0325.net`, `v2.env-sample.nazki0325.net` 
-PHP + Vite が動作するサブドメイン。`npm run dev` と `npm run build` の双方に対応。
+PHP + Vite が動作するサブドメイン。
+開発環境向けの `npm run dev` と、本番環境向けの `npm run build` の双方に対応。
 
 ### `static.env-sample.nazki0325.net`
 静的ファイルだけのサブドメイン。
