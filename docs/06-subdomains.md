@@ -200,10 +200,10 @@ server {
 
 ## 静的ファイルだけのサブドメイン
 
-`docs.env-sample.nazki0325.net` で `docs` 以下のファイルを見れるようにする。
+`static.env-sample.nazki0325.net` で `static` 以下のファイルを見れるようにする。
 ホストマシンの設定は `env-sample.nazki0325.net` と同じポートへの転送だけ。
 
-### docs/index.html
+### static/index.html
 
 中身は静的ファイルなら何でもいい
 
@@ -214,9 +214,9 @@ server {
 
 + server {
 +   listen 80;
-+   server_name docs.env-sample.nazki0325.net;
++   server_name static.env-sample.nazki0325.net;
 +
-+   root /src/docs;
++   root /src/static;
 +   index index.html;
 }
 ```
@@ -236,7 +236,7 @@ services:
             - 50000:80
         volumes:
             - ./public:/src/public
-+           - ./docs:/src/docs
++           - ./static:/src/static
             - ./docker/nginx/logs:/logs
             
 (略)
