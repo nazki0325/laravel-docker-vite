@@ -198,3 +198,45 @@ server {
 }
 ```
 
+## 静的ファイルだけのサブドメイン
+
+`docs.env-sample.nazki0325.net` で `docs` 以下のファイルを見れるようにする。
+
+### docs/index.html
+
+中身は静的ファイルなら何でもいい
+
+### docker/nginx/default.conf
+
+```diff
+(略)
+
++ server {
++   listen 80;
++   server_name docs.env-sample.nazki0325.net;
++
++   root /src/docs;
++   index index.html;
+}
+```
+
+### docker-compose.yml
+
+```diff
+(略)
+
+services:
+    nginx:
+        build:
+            context: ./docker/nginx
+        depends_on:
+            - fpm
+        ports:
+            - 50000:80
+        volumes:
+            - ./public:/src/public
++           - ./docs:/src/docs
+            - ./docker/nginx/logs:/logs
+            
+(略)
+```
