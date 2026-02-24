@@ -79,6 +79,7 @@ PS C:\Users\nazki\laravel-docker-vite> docker compose exec fpm npm run dev
 
 `npm install` でコケる場合、`node_modules` のボリュームを誰かが掴んだままになっている可能性がある。
 `docker compose run` を使ってる場合に陥りやすい。
+(`--rm` を付けないと、ボリュームを掴んだままコンテナが落ちるため)
 
 ## Vite のポート番号変更
 
